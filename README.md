@@ -1,0 +1,2 @@
+# WebMagicDemo
+基于WebMagic爬虫框架的简单爬虫Demo，并把爬取内容保存到mysql数据库中
