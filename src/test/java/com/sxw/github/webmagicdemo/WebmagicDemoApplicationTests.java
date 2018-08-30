@@ -1,7 +1,5 @@
 package com.sxw.github.webmagicdemo;
 
-import com.sxw.github.webmagicdemo.model.Article;
-import com.sxw.github.webmagicdemo.repository.ArticleRepository;
 import com.sxw.github.webmagicdemo.webmagic.ArticlePipeline;
 import com.sxw.github.webmagicdemo.webmagic.NeteaseNewsPageProcesser;
 import org.junit.Test;
@@ -67,5 +65,4 @@ public class WebmagicDemoApplicationTests {
         endTime = System.currentTimeMillis();
         System.out.println("爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒");
     }
-
 }

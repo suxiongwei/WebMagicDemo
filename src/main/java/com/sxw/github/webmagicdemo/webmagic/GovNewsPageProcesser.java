@@ -50,13 +50,4 @@ public class GovNewsPageProcesser implements PageProcessor {
     public Site getSite() {
         return site;
     }
-
-    /**
-     * html字符过滤
-     * @param str
-     * @return
-     */
-    private static String replaceHTML(String str){
-        return str!=null?str.replaceAll("\\<.*?>","").replaceAll("&nbsp;",""):"";
-    }
 }
