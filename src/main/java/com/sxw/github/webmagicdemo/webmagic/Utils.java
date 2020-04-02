@@ -23,6 +23,6 @@ public class Utils {
      * @return
      */
     public static String replaceHTML(String str){
-        return str!=null?str.replaceAll("\\<.*?>","").replaceAll("&nbsp;",""):"";
+        return str != null ? str.replaceAll("\\<.*?>","").replaceAll("&nbsp;","") : "";
     }
 }

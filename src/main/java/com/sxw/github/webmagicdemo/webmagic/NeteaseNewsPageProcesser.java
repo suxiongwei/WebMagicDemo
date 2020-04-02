@@ -5,6 +5,8 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import java.util.regex.Pattern;
+
 @Component
 public class NeteaseNewsPageProcesser implements PageProcessor {
     private Site site = Site.me().setDomain("news.163.com")
@@ -19,7 +21,7 @@ public class NeteaseNewsPageProcesser implements PageProcessor {
     @Override
     public void process(Page page) {
         //列表页
-        if (page.getUrl().regex(URL_LIST).match()||page.getUrl().regex("http://news\\.163\\.com/domestic").match()
+        if (page.getUrl().regex(URL_LIST).match() || page.getUrl().regex("http://news\\.163\\.com/domestic").match()
                 ||page.getUrl().regex("http://news\\.163\\.com/shehui").match()) {
             page.addTargetRequests(page.getHtml().links().regex(URL_POST).all());
             page.addTargetRequests(page.getHtml().links().regex(URL_LIST).all());
@@ -36,7 +38,6 @@ public class NeteaseNewsPageProcesser implements PageProcessor {
                 page.putField("url", page.getUrl().get());
             }
 
-
             String title = page.getResultItems().get("title");
             String content = page.getResultItems().get("content");
 
@@ -50,5 +51,10 @@ public class NeteaseNewsPageProcesser implements PageProcessor {
     @Override
     public Site getSite() {
         return site;
+    }
+
+    public static void main(String[] args) {
+        String url = "http://news.163.com/domestic/ssss.html";
+        System.out.println(Pattern.matches(URL_POST, url));
     }
 }
