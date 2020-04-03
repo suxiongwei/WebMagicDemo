@@ -2,13 +2,18 @@ package com.sxw.github.webmagicdemo;
 
 import com.sxw.github.webmagicdemo.webmagic.ArticlePipeline;
 import com.sxw.github.webmagicdemo.webmagic.NeteaseNewsPageProcesser;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
 
+import java.util.Set;
+
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class WebmagicDemoApplicationTests {
@@ -16,24 +21,27 @@ public class WebmagicDemoApplicationTests {
     @Test
     public void NeteaseNewsPageProcesserTest() {
         long startTime, endTime;
-        System.out.println("开始爬取...");
+        log.info("开始爬取...");
         startTime = System.currentTimeMillis();
-
-        Spider.create(new NeteaseNewsPageProcesser())
+        NeteaseNewsPageProcesser pageProcesser = new NeteaseNewsPageProcesser();
+        Spider.create(pageProcesser)
                 .addUrl("http://news.163.com/domestic")
-                .addUrl("http://news.163.com/shehui")
                 .addPipeline(articlePipeline)
                 .thread(5)
                 .run();
 
         endTime = System.currentTimeMillis();
-        System.out.println("爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒");
+        log.info("爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒");
+
+        Set<Request> requestSet = pageProcesser.targetRequests;
+        requestSet.forEach(e -> log.info("targetUrl:[{}]", e.getUrl()));
     }
 
     @Test
     public void GovNewsPageProcesserTest() {
         long startTime, endTime;
-        System.out.println("开始爬取...");
+        log.info("开始爬取...");
+
         startTime = System.currentTimeMillis();
 
         Spider.create(new NeteaseNewsPageProcesser())
@@ -63,6 +71,6 @@ public class WebmagicDemoApplicationTests {
                 .run();
 
         endTime = System.currentTimeMillis();
-        System.out.println("爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒");
+        log.info("爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒");
     }
 }

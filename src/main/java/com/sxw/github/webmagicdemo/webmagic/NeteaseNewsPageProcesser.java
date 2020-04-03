@@ -1,12 +1,18 @@
 package com.sxw.github.webmagicdemo.webmagic;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Component
 public class NeteaseNewsPageProcesser implements PageProcessor {
     private Site site = Site.me().setDomain("news.163.com")
@@ -18,6 +24,8 @@ public class NeteaseNewsPageProcesser implements PageProcessor {
 
     public static final String URL_POST = "http://news\\.163\\.com/.+\\.html";
 
+    public Set<Request> targetRequests = new HashSet<>();
+
     @Override
     public void process(Page page) {
         //列表页
@@ -25,6 +33,7 @@ public class NeteaseNewsPageProcesser implements PageProcessor {
                 ||page.getUrl().regex("http://news\\.163\\.com/shehui").match()) {
             page.addTargetRequests(page.getHtml().links().regex(URL_POST).all());
             page.addTargetRequests(page.getHtml().links().regex(URL_LIST).all());
+            targetRequests.addAll(new HashSet<>(page.getTargetRequests()));
         }else{
             //photoview 新闻和普通列表格式的新闻页面元素不一样
             String url = page.getUrl().get();
@@ -41,10 +50,10 @@ public class NeteaseNewsPageProcesser implements PageProcessor {
             String title = page.getResultItems().get("title");
             String content = page.getResultItems().get("content");
 
-            System.out.println("title="+title);
-            System.out.println("content="+content);
-            System.out.println("url="+url);
-            System.out.println("--------------------------------------------------");
+            log.info("title="+title);
+            log.info("content="+content);
+            log.info("url="+url);
+            log.info("--------------------------------------------------");
         }
     }
 
@@ -55,6 +64,6 @@ public class NeteaseNewsPageProcesser implements PageProcessor {
 
     public static void main(String[] args) {
         String url = "http://news.163.com/domestic/ssss.html";
-        System.out.println(Pattern.matches(URL_POST, url));
+        log.info("match:[{}]", Pattern.matches(URL_POST, url));
     }
 }
